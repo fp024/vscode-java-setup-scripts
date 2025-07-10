@@ -1,0 +1,21 @@
+# Node.js
+node_modules/
+
+# VSCode
+.vscode/**
+!.vscode/settings.json
+
+# OS별 임시파일
+.DS_Store
+Thumbs.db
+
+# 로그/환경파일
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.env
+
+# 기타
+/dist/
+/build/

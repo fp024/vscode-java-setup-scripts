@@ -1,0 +1,12 @@
+{
+  // https://cspell.org/
+  "version": "0.2",
+  "ignorePaths": [],
+  "words": [
+    "codegen",
+    "gradlew",
+    "prefs"
+  ],
+  "ignoreWords": [],
+  "import": []
+}

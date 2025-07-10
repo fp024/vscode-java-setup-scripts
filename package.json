@@ -1,0 +1,20 @@
+{
+  "name": "vscode-java-setup-scripts",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=16.17.0"
+  },
+  "bin": {
+    "add-javac-params": "./src/addJavacParametersOption.js",
+    "init-test-jvm": "./src/initTestJvmOptions.js",
+    "run-gradle-wrapper": "./src/runGradleWrapper.js"
+  },
+  "dependencies": {
+    "comment-json": "^4.2.5"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}
