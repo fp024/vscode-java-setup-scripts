@@ -12,7 +12,7 @@ VSCode Java 프로젝트의 개발 환경 세팅을 자동화하는 CLI 스크�
 ### 1. GitHub 저장소를 직접 의존성으로 추가
 
 ```bash
-pnpm add -D github:fp024/vscode-java-setup-scripts#v1.0.0
+pnpm add -D github:fp024/vscode-java-setup-scripts#RELEASE_VERSION
 ```
 
 > 최신 릴리즈는 [GitHub Releases](https://github.com/fp024/vscode-java-setup-scripts/releases)에서 확인하세요.
@@ -23,9 +23,9 @@ pnpm add -D github:fp024/vscode-java-setup-scripts#v1.0.0
 
 ```json
 "scripts": {
-  "add-javac-parameters-option": "add-javac-params",
+  "add-javac-parameters-option": "add-javac-parameters-option",
   "copy-mockito-jar": "run-gradle-wrapper copyMockitoJar",
-  "init-test-jvm-options": "init-test-jvm",
+  "init-test-jvm-options": "init-test-jvm-options",
   "init-project": "pnpm run add-javac-parameters-option && pnpm run copy-mockito-jar && pnpm run init-test-jvm-options"
 }
 ```

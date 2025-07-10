@@ -7,8 +7,8 @@
     "node": ">=16.17.0"
   },
   "bin": {
-    "add-javac-params": "./src/addJavacParametersOption.js",
-    "init-test-jvm": "./src/initTestJvmOptions.js",
+    "add-javac-parameters-option": "./src/addJavacParametersOption.js",
+    "init-test-jvm-options": "./src/initTestJvmOptions.js",
     "run-gradle-wrapper": "./src/runGradleWrapper.js"
   },
   "dependencies": {
