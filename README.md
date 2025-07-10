@@ -11,16 +11,16 @@ VSCode Java 프로젝트의 개발 환경 세팅을 자동화하는 CLI 스크�
 
 **pnpm 사용 예시:**
 ```bash
-pnpm add <GITHUB_URL>#<BRANCH_OR_TAG>
+pnpm add -D <GITHUB_URL>#<BRANCH_OR_TAG>
 ```
 예시:
 ```bash
-pnpm add github:fp024/vscode-java-setup-scripts#master
+pnpm add -D github:fp024/vscode-java-setup-scripts#master
 ```
 
 **npm 사용 예시:**
 ```bash
-npm install git+https://github.com/fp024/vscode-java-setup-scripts.git#master
+npm install -D git+https://github.com/fp024/vscode-java-setup-scripts.git#master
 ```
 
 > 실제 저장소 주소와 브랜치/태그명을 맞게 입력하세요.
