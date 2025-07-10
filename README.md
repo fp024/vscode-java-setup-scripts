@@ -15,12 +15,12 @@ pnpm add <GITHUB_URL>#<BRANCH_OR_TAG>
 ```
 예시:
 ```bash
-pnpm add github:fp024/vscode-java-setup-scripts#main
+pnpm add github:fp024/vscode-java-setup-scripts#master
 ```
 
 **npm 사용 예시:**
 ```bash
-npm install git+https://github.com/fp024/vscode-java-setup-scripts.git
+npm install git+https://github.com/fp024/vscode-java-setup-scripts.git#master
 ```
 
 > 실제 저장소 주소와 브랜치/태그명을 맞게 입력하세요.
