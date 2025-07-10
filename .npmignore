@@ -1,0 +1,20 @@
+# 개발/환경/설정 파일
+.vscode/
+.git/
+.gitignore
+cspell.json
+pnpm-lock.yaml
+
+# 의존성
+node_modules/
+
+# 테스트/CI/문서(필요시)
+*.test.js
+*.spec.js
+coverage/
+docs/
+.github/
+
+# OS/에디터 임시파일
+.DS_Store
+Thumbs.db 
