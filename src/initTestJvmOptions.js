@@ -2,7 +2,6 @@
 import { readdir, readFile, writeFile } from "fs/promises";
 import path from "path";
 import { parse, stringify } from "comment-json";
-import { fileURLToPath } from "url";
 
 // 상수 정의
 export const CONFIG = {
@@ -139,7 +138,7 @@ async function initJvmOptions() {
 
 export { initJvmOptions, updateJvmOption };
 
-if (process.argv[1]?.includes(path.normalize("src/initTestJvmOptions.js"))) {
+if (process.argv[1]?.includes(`src${path.sep}initTestJvmOptions.js`)) {
   initJvmOptions().then((result) => {
     if (!result.success) {
       console.error(`Error updating JVM options: ${result.error}`);

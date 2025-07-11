@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { exec } from "child_process";
 import os from "os";
-import { fileURLToPath } from "url";
+import path from "path";
 
 function getGradleCommand() {
   return os.platform() === "win32" ? "gradlew.bat" : "./gradlew";
@@ -9,7 +9,7 @@ function getGradleCommand() {
 
 export { getGradleCommand };
 
-if (process.argv[1]?.includes(path.normalize("src/runGradleWrapper.js"))) {
+if (process.argv[1]?.includes(`src${path.sep}runGradleWrapper.js`)) {
   const gradleCommand = getGradleCommand();
   const args = process.argv.slice(2).join(" ");
   exec(`${gradleCommand} ${args}`, (error, stdout, stderr) => {
