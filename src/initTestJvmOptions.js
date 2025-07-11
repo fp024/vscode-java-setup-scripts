@@ -1,29 +1,30 @@
 #!/usr/bin/env node
-import { readdir, readFile, writeFile } from 'fs/promises';
-import path from 'path';
-import { parse, stringify } from 'comment-json';
+import { readdir, readFile, writeFile } from "fs/promises";
+import path from "path";
+import { parse, stringify } from "comment-json";
+import { fileURLToPath } from "url";
 
 // 상수 정의
-const CONFIG = {
+export const CONFIG = {
   PATHS: {
-    JAVAAGENT_DIR: 'javaagent-libs',
-    VSCODE_SETTINGS: '.vscode/settings.json',
+    JAVAAGENT_DIR: "javaagent-libs",
+    VSCODE_SETTINGS: ".vscode/settings.json",
   },
   MOCKITO_CORE_FILE: {
-    PREFIX: 'mockito-core',
-    SUFFIX: '.jar',
+    PREFIX: "mockito-core",
+    SUFFIX: ".jar",
   },
   JVM_OPTIONS: {
     MOCKITO_AGENT: {
-      PREFIX: '-javaagent:${workspaceFolder}/javaagent-libs/mockito-core',
+      PREFIX: "-javaagent:${workspaceFolder}/javaagent-libs/mockito-core",
       // VALUE에 해당하는 앞부분이 PREFIX부분에 정의되어있는데, 뒷부분의 -{버전}.jar 부분은 동적으로 결정됨
     },
     XSHARE: {
-      PREFIX: '-Xshare:',
-      VALUE: 'off',
+      PREFIX: "-Xshare:",
+      VALUE: "off",
     },
   },
-  SETTINGS_KEY: 'java.test.config',
+  SETTINGS_KEY: "java.test.config",
 };
 
 /**
@@ -71,12 +72,12 @@ async function initJvmOptions() {
     );
 
     if (!mockitoJar) {
-      return { success: false, error: 'Mockito JAR not found' };
+      return { success: false, error: "Mockito JAR not found" };
     }
 
     // VSCode 설정 파일 읽기
     const settingsPath = path.join(process.cwd(), CONFIG.PATHS.VSCODE_SETTINGS);
-    const settings = parse(await readFile(settingsPath, 'utf8'));
+    const settings = parse(await readFile(settingsPath, "utf8"));
 
     // 기존 VM 인자 가져오기
     let existingVmArgs = settings[CONFIG.SETTINGS_KEY]?.vmArgs || [];
@@ -121,13 +122,13 @@ async function initJvmOptions() {
       vmArgs: existingVmArgs,
     };
 
-    await writeFile(settingsPath, stringify(settings, null, 2, { eol: '\n' }));
+    await writeFile(settingsPath, stringify(settings, null, 2, { eol: "\n" }));
 
     if (changes.length > 0) {
-      console.log('JVM settings updated:');
+      console.log("JVM settings updated:");
       changes.forEach((change) => console.log(`- ${change}`));
     } else {
-      console.log('JVM settings already up to date, no changes needed');
+      console.log("JVM settings already up to date, no changes needed");
     }
 
     return { success: true };
@@ -136,10 +137,13 @@ async function initJvmOptions() {
   }
 }
 
-// 스크립트 실행
-initJvmOptions().then((result) => {
-  if (!result.success) {
-    console.error(`Error updating JVM options: ${result.error}`);
-    process.exit(1);
-  }
-});
+export { initJvmOptions, updateJvmOption };
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  initJvmOptions().then((result) => {
+    if (!result.success) {
+      console.error(`Error updating JVM options: ${result.error}`);
+      process.exit(1);
+    }
+  });
+}

@@ -2,5 +2,10 @@
   "[javascript]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "jestrunner.jestCommand": "pnpm exec cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-deprecation\" node 'node_modules/jest/bin/jest.js'",
+  "jestrunner.debugOptions": {
+    "runtimeArgs": ["--experimental-vm-modules", "--no-deprecation"]
   }
 }

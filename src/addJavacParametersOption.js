@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { access, mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
+import { fileURLToPath } from "url";
 
 const SETTINGS = {
   DIR: ".settings",
@@ -45,7 +46,11 @@ async function addCompilerOption() {
   }
 }
 
-addCompilerOption().catch((error) => {
-  console.error("Error:", error.message);
-  process.exit(1);
-});
+export { addCompilerOption, ensureDirectory };
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  addCompilerOption().catch((error) => {
+    console.error("Error:", error.message);
+    process.exit(1);
+  });
+}
