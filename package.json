@@ -21,6 +21,7 @@
     "prettier": "^3.6.2"
   },
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "add-javac-parameters-option": "node src/addJavacParametersOption.js"
   }
 }

@@ -9,7 +9,7 @@ function getGradleCommand() {
 
 export { getGradleCommand };
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (process.argv[1]?.includes(path.normalize("src/runGradleWrapper.js"))) {
   const gradleCommand = getGradleCommand();
   const args = process.argv.slice(2).join(" ");
   exec(`${gradleCommand} ${args}`, (error, stdout, stderr) => {

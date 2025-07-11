@@ -19,3 +19,7 @@ pnpm-debug.log*
 # 기타
 /dist/
 /build/
+
+
+# 테스트
+.settings

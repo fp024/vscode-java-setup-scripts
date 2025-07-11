@@ -139,7 +139,7 @@ async function initJvmOptions() {
 
 export { initJvmOptions, updateJvmOption };
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (process.argv[1]?.includes(path.normalize("src/initTestJvmOptions.js"))) {
   initJvmOptions().then((result) => {
     if (!result.success) {
       console.error(`Error updating JVM options: ${result.error}`);

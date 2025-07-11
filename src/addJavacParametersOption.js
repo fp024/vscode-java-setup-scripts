@@ -48,7 +48,9 @@ async function addCompilerOption() {
 
 export { addCompilerOption, ensureDirectory };
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (
+  process.argv[1]?.includes(path.normalize("src/addJavacParametersOption.js"))
+) {
   addCompilerOption().catch((error) => {
     console.error("Error:", error.message);
     process.exit(1);
