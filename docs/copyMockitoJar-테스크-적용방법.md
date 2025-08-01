@@ -55,9 +55,9 @@ dependencies {
 }
 ```
 
-#### Case 2: toml을 사용하지 않는 경우
+#### Case 2: toml을 사용하지 않는 경우 (또는 **spring-boot-starter-test** 사용할 때)
 
-toml 파일을 사용하지 않는다면, `java21-mockito-agent.gradle` 파일에서 주석 처리된 부분을 활성화하세요:
+toml 파일을 사용하지 않거나 Spring Boot Test를 사용한다면, `java21-mockito-agent.gradle` 파일에서 주석 처리된 부분을 활성화하세요:
 
 ```groovy
 dependencies {
