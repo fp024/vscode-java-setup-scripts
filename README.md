@@ -1,5 +1,6 @@
 # vscode-java-setup-scripts
 
+[![CI](https://github.com/fp024/vscode-java-setup-scripts/workflows/CI/badge.svg)](https://github.com/fp024/vscode-java-setup-scripts/actions/workflows/ci.yml)
 [![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/fp024/vscode-java-setup-scripts?label=latest%20tag)](https://github.com/fp024/vscode-java-setup-scripts/tags)
 
 VSCode Java 프로젝트의 개발 환경 세팅을 자동화하는 CLI 스크립트 모음입니다.  
