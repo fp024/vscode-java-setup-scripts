@@ -1,6 +1,6 @@
 # vscode-java-setup-scripts
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/fp024/vscode-java-setup-scripts)](https://github.com/fp024/vscode-java-setup-scripts/releases)
+[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/fp024/vscode-java-setup-scripts?label=latest%20tag)](https://github.com/fp024/vscode-java-setup-scripts/tags)
 
 VSCode Java 프로젝트의 개발 환경 세팅을 자동화하는 CLI 스크립트 모음입니다.  
 (예: javac 파라미터 옵션 추가, Mockito JAR 복사, 테스트 JVM 옵션 초기화 등)
