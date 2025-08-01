@@ -1,0 +1,39 @@
+// Explicitly setting up instrumentation for inline mocking (Java 21+) 설정
+// VSCode Java Test와 Gradle Test 모두에서 JavaAgent가 제대로 인식되도록 하는 설정
+// * https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+
+configurations {
+  mockitoAgent
+}
+
+dependencies {
+  // mockitoAgent('org.mockito:mockito-core') {
+  // 💡 toml에 정의 했을 경우 아래로 사용
+  mockitoAgent(libs.mockito.core) {
+    transitive = false
+  }
+}
+
+// vscode-java-test가 build.gradle의 test 설정을 인식하지 못하기 때문에,
+// -javaagent 설정이 필요할 경우 라이브러리를 수동으로 복사하는 테스크를 만들었다.
+tasks.register('copyMockitoJar') {
+  def javaAgentLibsDir = "${project.rootDir}/javaagent-libs"
+  doLast {
+    delete fileTree(dir: javaAgentLibsDir, include: '**/*.jar')
+    copy {
+      from configurations.mockitoAgent
+      into javaAgentLibsDir
+    }
+  }
+}
+
+// 의존성 해결 후 Jar 파일을 복사
+afterEvaluate {
+  tasks.named('copyMockitoJar').configure {
+    dependsOn classes
+  }
+}
+
+tasks.named('test') {
+  jvmArgs += ["-javaagent:${configurations.mockitoAgent.asPath}", "-Xshare:off"]
+}

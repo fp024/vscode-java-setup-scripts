@@ -1,6 +1,6 @@
 {
   "name": "vscode-java-setup-scripts",
-  "version": "1.0.2",
+  "version": "0.1.0",
   "type": "module",
   "private": true,
   "engines": {
@@ -9,19 +9,22 @@
   "bin": {
     "add-javac-parameters-option": "./src/addJavacParametersOption.js",
     "init-test-jvm-options": "./src/initTestJvmOptions.js",
-    "run-gradle-wrapper": "./src/runGradleWrapper.js"
+    "run-gradle-wrapper": "./src/runGradleWrapper.js",
+    "copy-mockito-agent-gradle": "./src/copyMockitoAgentGradle.js"
   },
   "dependencies": {
     "comment-json": "^4.2.5"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
+    "cross-env": "^10.0.0",
     "jest": "^30.0.3",
     "mock-fs": "^5.2.0",
     "prettier": "^3.6.2"
   },
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "add-javac-parameters-option": "node src/addJavacParametersOption.js"
+    "add-javac-parameters-option": "node src/addJavacParametersOption.js",
+    "copy-mockito-agent-gradle": "node src/copyMockitoAgentGradle.js"
   }
 }
