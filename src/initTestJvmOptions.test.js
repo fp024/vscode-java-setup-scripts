@@ -2,7 +2,7 @@ import mock from "mock-fs";
 import fs from "fs/promises";
 import path from "path";
 import { initJvmOptions, CONFIG } from "./initTestJvmOptions.js";
-import { jest } from "@jest/globals";
+import { describe, beforeEach, afterEach, expect, it, vi } from "vitest";
 
 const JAVAAGENT_DIR = CONFIG.PATHS.JAVAAGENT_DIR;
 const SETTINGS_KEY = CONFIG.SETTINGS_KEY;
@@ -12,12 +12,12 @@ const PREVIOUS_MOCKITO_JAR = "mockito-core-5.17.0.jar";
 describe("initJvmOptions", () => {
   beforeEach(() => {
     mock({});
-    jest.spyOn(console, "log").mockImplementation(() => {});
-    jest.spyOn(console, "error").mockImplementation(() => {});
+    vi.spyOn(console, "log").mockImplementation(() => {});
+    vi.spyOn(console, "error").mockImplementation(() => {});
   });
   afterEach(() => {
     mock.restore();
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it("Mockito JAR이 없으면 에러를 반환한다", async () => {
@@ -46,7 +46,7 @@ describe("initJvmOptions", () => {
     const result = await initJvmOptions();
     expect(result.success).toBe(true);
     expect(console.log).toHaveBeenCalledWith(
-      "JVM settings already up to date, no changes needed"
+      "JVM settings already up to date, no changes needed",
     );
   });
 
@@ -63,7 +63,7 @@ describe("initJvmOptions", () => {
       expect.arrayContaining([
         `-javaagent:${"${workspaceFolder}"}/javaagent-libs/${LATEST_MOCKITO_JAR}`,
         "-Xshare:off",
-      ])
+      ]),
     );
   });
 
@@ -88,7 +88,7 @@ describe("initJvmOptions", () => {
       expect.arrayContaining([
         `-javaagent:${"${workspaceFolder}"}/javaagent-libs/${LATEST_MOCKITO_JAR}`,
         "-Xshare:off",
-      ])
+      ]),
     );
   });
 });

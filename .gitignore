@@ -5,6 +5,9 @@ node_modules/
 .vscode/**
 !.vscode/settings.json
 
+# WebStorm
+.idea
+
 # OS별 임시파일
 .DS_Store
 Thumbs.db

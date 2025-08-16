@@ -1,7 +1,7 @@
-import { jest } from "@jest/globals";
-import mock from "mock-fs";
 import fs from "fs/promises";
+import mock from "mock-fs";
 import path from "path";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { addCompilerOption } from "./addJavacParametersOption.js";
 
 describe("addCompilerOption", () => {
@@ -13,11 +13,11 @@ describe("addCompilerOption", () => {
 
   beforeEach(() => {
     mock({});
-    jest.spyOn(console, "log").mockImplementation(() => {});
+    vi.spyOn(console, "log").mockImplementation(() => {});
   });
   afterEach(() => {
     mock.restore();
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it("1. .settings 디렉토리와 prefs 파일이 생성되고 옵션이 추가된다", async () => {

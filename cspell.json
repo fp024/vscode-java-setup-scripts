@@ -4,6 +4,7 @@
   "ignorePaths": [],
   "words": [
     "codegen",
+    "esbuild",
     "gradlew",
     "npmignore",
     "prefs"

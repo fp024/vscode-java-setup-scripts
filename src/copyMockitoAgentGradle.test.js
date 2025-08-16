@@ -1,20 +1,20 @@
-import { jest } from "@jest/globals";
+import { access, readFile, stat } from "fs/promises";
 import mock from "mock-fs";
-import { access, stat, readFile } from "fs/promises";
 import path from "path";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { copyMockitoAgentGradle } from "./copyMockitoAgentGradle.js";
 
 describe("copyMockitoAgentGradle", () => {
   const mockGradleContent = `[Mockito Agent 설정 파일 내용...]`;
 
   beforeEach(() => {
-    jest.spyOn(console, "log").mockImplementation(() => {});
-    jest.spyOn(console, "error").mockImplementation(() => {});
+    vi.spyOn(console, "log").mockImplementation(() => {});
+    vi.spyOn(console, "error").mockImplementation(() => {});
   });
 
   afterEach(() => {
     mock.restore();
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   test("should copy java21-mockito-agent.gradle to gradle directory", async () => {

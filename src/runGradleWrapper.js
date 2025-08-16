@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import { exec } from "child_process";
 import os from "os";
 import path from "path";

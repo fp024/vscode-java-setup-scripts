@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import { access, mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
 

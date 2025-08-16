@@ -1,7 +1,6 @@
-#!/usr/bin/env node
+import { parse, stringify } from "comment-json";
 import { readdir, readFile, writeFile } from "fs/promises";
 import path from "path";
-import { parse, stringify } from "comment-json";
 
 // 상수 정의
 export const CONFIG = {

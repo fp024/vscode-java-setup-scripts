@@ -1,6 +1,4 @@
-#!/usr/bin/env node
-
-import { copyFile, mkdir, access } from "fs/promises";
+import { access, copyFile, mkdir } from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 

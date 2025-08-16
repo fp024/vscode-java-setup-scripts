@@ -16,14 +16,13 @@
     "comment-json": "^4.2.5"
   },
   "devDependencies": {
-    "@types/jest": "^30.0.0",
     "cross-env": "^10.0.0",
-    "jest": "^30.0.3",
-    "mock-fs": "^5.2.0",
+    "vitest": "^3.2.4",
+    "mock-fs": "^5.5.0",
     "prettier": "^3.6.2"
   },
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test": "vitest run",
     "add-javac-parameters-option": "node src/addJavacParametersOption.js",
     "copy-mockito-agent-gradle": "node src/copyMockitoAgentGradle.js"
   }
