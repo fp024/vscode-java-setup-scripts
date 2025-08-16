@@ -59,7 +59,7 @@ pnpm run init-project
 
 ## 요구사항
 
-- Node.js 16.17.0 이상
+- Node.js 22.17.0 이상
 - pnpm (npm을 사용할 경우 스크립트 실행명령을 알맞게 변경 필요)
 
 ---
