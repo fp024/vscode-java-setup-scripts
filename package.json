@@ -16,7 +16,6 @@
     "comment-json": "^4.2.5"
   },
   "devDependencies": {
-    "cross-env": "^10.0.0",
     "vitest": "^3.2.4",
     "mock-fs": "^5.5.0",
     "prettier": "^3.6.2"
