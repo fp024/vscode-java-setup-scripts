@@ -1,6 +1,7 @@
 import { parse, stringify } from "comment-json";
 import { readdir, readFile, writeFile } from "fs/promises";
 import path from "path";
+import { isDirectRun } from "./util/isDirectRun.js";
 
 // 상수 정의
 export const CONFIG = {
@@ -137,7 +138,7 @@ async function initJvmOptions() {
 
 export { initJvmOptions, updateJvmOption };
 
-if (process.argv[1]?.includes(`src${path.sep}initTestJvmOptions.js`)) {
+if (isDirectRun(import.meta.url)) {
   initJvmOptions().then((result) => {
     if (!result.success) {
       console.error(`Error updating JVM options: ${result.error}`);

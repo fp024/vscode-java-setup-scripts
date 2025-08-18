@@ -1,5 +1,6 @@
 import { access, mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
+import { isDirectRun } from "./util/isDirectRun.js";
 
 const SETTINGS = {
   DIR: ".settings",
@@ -46,7 +47,7 @@ async function addCompilerOption() {
 
 export { addCompilerOption, ensureDirectory };
 
-if (process.argv[1]?.includes(`src${path.sep}addJavacParametersOption.js`)) {
+if (isDirectRun(import.meta.url)) {
   addCompilerOption().catch((error) => {
     console.error("Error:", error.message);
     process.exit(1);

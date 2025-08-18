@@ -1,6 +1,6 @@
 import { exec } from "child_process";
 import os from "os";
-import path from "path";
+import { isDirectRun } from "./util/isDirectRun.js";
 
 function getGradleCommand() {
   return os.platform() === "win32" ? "gradlew.bat" : "./gradlew";
@@ -8,7 +8,7 @@ function getGradleCommand() {
 
 export { getGradleCommand };
 
-if (process.argv[1]?.includes(`src${path.sep}runGradleWrapper.js`)) {
+if (isDirectRun(import.meta.url)) {
   const gradleCommand = getGradleCommand();
   const args = process.argv.slice(2).join(" ");
   exec(`${gradleCommand} ${args}`, (error, stdout, stderr) => {

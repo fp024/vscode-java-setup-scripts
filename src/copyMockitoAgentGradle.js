@@ -1,6 +1,7 @@
 import { access, copyFile, mkdir } from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
+import { isDirectRun } from "./util/isDirectRun.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -51,7 +52,7 @@ export async function copyMockitoAgentGradle() {
 }
 
 // 스크립트가 직접 실행된 경우에만 함수 호출
-if (process.argv[1]?.includes(`src${path.sep}copyMockitoAgentGradle.js`)) {
+if (isDirectRun(import.meta.url)) {
   copyMockitoAgentGradle().catch((error) => {
     console.error("Error:", error.message);
     process.exit(1);
