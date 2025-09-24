@@ -10,6 +10,7 @@
     "add-javac-parameters-option": "./src/addJavacParametersOption.js",
     "init-test-jvm-options": "./src/initTestJvmOptions.js",
     "run-gradle-wrapper": "./src/runGradleWrapper.js",
+    "run-maven-wrapper": "./src/runMavenWrapper.js",
     "copy-mockito-agent-gradle": "./src/copyMockitoAgentGradle.js"
   },
   "dependencies": {

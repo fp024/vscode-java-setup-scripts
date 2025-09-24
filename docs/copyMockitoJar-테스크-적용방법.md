@@ -133,3 +133,86 @@ tasks.named('test') {
 - [Mockito Documentation - Inline Mocking](https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3)
   - **Java 21+ 중요 변경사항**: Java 21부터는 보안상의 이유로 라이브러리가 런타임에 자신을 JavaAgent로 동적 추가하는 것이 제한됨
   - **해결방법**: Mockito inline mocking 사용 시 JavaAgent를 명시적으로 설정하거나, subclass/spy 기반 mocking 사용
+
+
+
+---
+
+## Maven 환경의 에서의 적용
+
+#### pom.xml에 디펜던시 copy goal 추가 
+
+```xml
+  <build>
+    ...
+    <plugins>
+      ...
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-mockito-agent</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.mockito</groupId>
+                  <artifactId>mockito-core</artifactId>
+                  <version>${mockito.version}</version>
+                  <outputDirectory>${project.basedir}/javaagent-libs</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+              <overWriteReleases>true</overWriteReleases>
+              <overWriteSnapshots>true</overWriteSnapshots>
+            </configuration>
+          </execution>
+          <execution>
+            <goals>
+              <goal>properties</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <argLine>-javaagent:${org.mockito:mockito-core:jar}</argLine>
+        </configuration>
+      </plugin>
+      ...
+    </plugins>
+  </build>
+```
+
+
+
+### package.json에 다음 내용 추가
+
+maven wrapper로 디펜던시 Copy Goal을 실행할 수 있도록 추가한다.
+
+```json
+  "scripts": {
+    ...
+    "copy-mockito-jar-maven": "node scripts/runMavenWrapper.js dependency:copy@copy-mockito-agent",
+    ...
+  },
+```
+
+완성된 모습은... 보통 아래와 같이 된다.
+
+```json
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "format": "prettier --write \"./**/*.{html,css,js,json}\"",
+    "add-javac-parameters-option": "add-javac-parameters-option",
+    "copy-mockito-jar-maven": "copy-mockito-jar-maven dependency:copy@copy-mockito-agent",
+    "init-test-jvm-options": "init-test-jvm-options",
+    "init-project": "pnpm run add-javac-parameters-option && pnpm run copy-mockito-jar-maven && pnpm run init-test-jvm-options"
+  },
+```
+
