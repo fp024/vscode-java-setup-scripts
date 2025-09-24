@@ -147,6 +147,32 @@ tasks.named('test') {
     ...
     <plugins>
       ...
+      <!-- 기존 javaagent-libs/mockito-core-x.x.x.jar 삭제-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>clean-javaagent-libs</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+            <configuration>
+              <excludeDefaultDirectories>true</excludeDefaultDirectories>
+              <filesets>
+                <fileset>
+                  <directory>${project.basedir}/javaagent-libs</directory>
+                  <includes>
+                    <include>**/*</include>
+                  </includes>
+                </fileset>
+              </filesets>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- 프로젝트 디펜던시의 javaagent-libs/mockito-core-x.x.x.jar 복사 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -198,7 +224,7 @@ maven wrapper로 디펜던시 Copy Goal을 실행할 수 있도록 추가한다.
 ```json
   "scripts": {
     ...
-    "copy-mockito-jar-maven": "run-maven-wrapper dependency:copy@copy-mockito-agent",
+    "copy-mockito-jar-maven": "run-maven-wrapper clean:clean@clean-javaagent-libs dependency:copy@copy-mockito-agent",
     ...
   },
 ```
@@ -210,7 +236,7 @@ maven wrapper로 디펜던시 Copy Goal을 실행할 수 있도록 추가한다.
     "preinstall": "npx only-allow pnpm",
     "format": "prettier --write \"./**/*.{html,css,js,json}\"",
     "add-javac-parameters-option": "add-javac-parameters-option",
-    "copy-mockito-jar-maven": "run-maven-wrapper dependency:copy@copy-mockito-agent",
+    "copy-mockito-jar-maven": "run-maven-wrapper clean:clean@clean-javaagent-libs dependency:copy@copy-mockito-agent",
     "init-test-jvm-options": "init-test-jvm-options",
     "init-project": "pnpm run add-javac-parameters-option && pnpm run copy-mockito-jar-maven && pnpm run init-test-jvm-options"
   },
