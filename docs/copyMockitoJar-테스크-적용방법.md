@@ -198,7 +198,7 @@ maven wrapper로 디펜던시 Copy Goal을 실행할 수 있도록 추가한다.
 ```json
   "scripts": {
     ...
-    "copy-mockito-jar-maven": "node scripts/runMavenWrapper.js dependency:copy@copy-mockito-agent",
+    "copy-mockito-jar-maven": "run-maven-wrapper dependency:copy@copy-mockito-agent",
     ...
   },
 ```
@@ -210,7 +210,7 @@ maven wrapper로 디펜던시 Copy Goal을 실행할 수 있도록 추가한다.
     "preinstall": "npx only-allow pnpm",
     "format": "prettier --write \"./**/*.{html,css,js,json}\"",
     "add-javac-parameters-option": "add-javac-parameters-option",
-    "copy-mockito-jar-maven": "copy-mockito-jar-maven dependency:copy@copy-mockito-agent",
+    "copy-mockito-jar-maven": "run-maven-wrapper dependency:copy@copy-mockito-agent",
     "init-test-jvm-options": "init-test-jvm-options",
     "init-project": "pnpm run add-javac-parameters-option && pnpm run copy-mockito-jar-maven && pnpm run init-test-jvm-options"
   },
