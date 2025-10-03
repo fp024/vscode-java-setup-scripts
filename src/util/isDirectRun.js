@@ -8,20 +8,18 @@ import { fileURLToPath } from "url";
  * @param {string} moduleUrl import.meta.url
  */
 export function isDirectRun(moduleUrl) {
-  const invoked = process.argv[1] ? path.resolve(process.argv[1]) : "";
+  // ESM 모듈에서 호출되므로 process.argv[1]은 항상 존재
+  const invoked = path.resolve(process.argv[1]);
   const modulePath = fileURLToPath(moduleUrl);
 
-  // 파일 존재 여부 확인
-  if (!fs.existsSync(invoked)) {
-    throw new Error(`Invoked file does not exist: ${invoked}`);
-  }
-  if (!fs.existsSync(modulePath)) {
-    throw new Error(`Module file does not exist: ${modulePath}`);
-  }
+  try {
+    // 심볼릭 링크 해결 (파일 존재 여부 확인도 함께 수행됨)
+    const invokedReal = fs.realpathSync(invoked);
+    const moduleReal = fs.realpathSync(modulePath);
 
-  // 심볼릭 링크 해결
-  const invokedReal = fs.realpathSync(invoked);
-  const moduleReal = fs.realpathSync(modulePath);
-
-  return invokedReal === moduleReal;
+    return invokedReal === moduleReal;
+  } catch (error) {
+    // 파일이 존재하지 않거나 접근할 수 없는 경우
+    throw new Error(`Cannot resolve file path: ${error.message}`);
+  }
 }
