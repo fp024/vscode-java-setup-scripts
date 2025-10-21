@@ -1,5 +1,5 @@
-import { access, mkdir, readFile, writeFile } from "fs/promises";
-import path from "path";
+import { access, mkdir, readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
 import { isDirectRun } from "./util/isDirectRun.js";
 
 const SETTINGS = {
@@ -28,14 +28,14 @@ async function addCompilerOption() {
 
   try {
     const fileContent = await readFile(prefsFilePath, "utf8");
-    if (!fileContent.includes(prefsContent.trim())) {
+    if (fileContent.includes(prefsContent.trim())) {
+      console.log(
+        "The -parameters compiler option already exists for VSCode Java environment."
+      );
+    } else {
       await writeFile(prefsFilePath, fileContent + prefsContent);
       console.log(
         "The -parameters compiler option has been added for VSCode Java environment."
-      );
-    } else {
-      console.log(
-        "The -parameters compiler option already exists for VSCode Java environment."
       );
     }
   } catch {
@@ -48,8 +48,10 @@ async function addCompilerOption() {
 export { addCompilerOption, ensureDirectory };
 
 if (isDirectRun(import.meta.url)) {
-  addCompilerOption().catch((error) => {
+  try {
+    await addCompilerOption();
+  } catch (error) {
     console.error("Error:", error.message);
     process.exit(1);
-  });
+  }
 }

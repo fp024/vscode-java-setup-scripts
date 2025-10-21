@@ -1,6 +1,6 @@
 import { getGradleCommand } from "./runGradleWrapper.js";
 import { describe, expect, afterEach, it, vi } from "vitest";
-import os from "os";
+import os from "node:os";
 
 describe("getGradleCommand", () => {
   afterEach(() => {

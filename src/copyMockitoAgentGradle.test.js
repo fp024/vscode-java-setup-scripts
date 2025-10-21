@@ -1,6 +1,6 @@
-import { access, readFile, stat } from "fs/promises";
+import { access, readFile, stat } from "node:fs/promises";
 import mock from "mock-fs";
-import path from "path";
+import path from "node:path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { copyMockitoAgentGradle } from "./copyMockitoAgentGradle.js";
 

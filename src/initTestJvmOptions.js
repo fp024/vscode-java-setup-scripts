@@ -1,6 +1,6 @@
 import { parse, stringify } from "comment-json";
-import { readdir, readFile, writeFile } from "fs/promises";
-import path from "path";
+import { readdir, readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
 import { isDirectRun } from "./util/isDirectRun.js";
 
 // 상수 정의
@@ -139,10 +139,9 @@ async function initJvmOptions() {
 export { initJvmOptions, updateJvmOption };
 
 if (isDirectRun(import.meta.url)) {
-  initJvmOptions().then((result) => {
-    if (!result.success) {
-      console.error(`Error updating JVM options: ${result.error}`);
-      process.exit(1);
-    }
-  });
+  const result = await initJvmOptions();
+  if (!result.success) {
+    console.error(`Error updating JVM options: ${result.error}`);
+    process.exit(1);
+  }
 }

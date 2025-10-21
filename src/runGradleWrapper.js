@@ -1,5 +1,5 @@
-import { exec } from "child_process";
-import os from "os";
+import { exec } from "node:child_process";
+import os from "node:os";
 import { isDirectRun } from "./util/isDirectRun.js";
 
 function getGradleCommand() {

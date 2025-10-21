@@ -1,6 +1,6 @@
 import mock from "mock-fs";
-import fs from "fs/promises";
-import path from "path";
+import fs from "node:fs/promises";
+import path from "node:path";
 import { initJvmOptions, CONFIG } from "./initTestJvmOptions.js";
 import { describe, beforeEach, afterEach, expect, it, vi } from "vitest";
 
@@ -46,7 +46,7 @@ describe("initJvmOptions", () => {
     const result = await initJvmOptions();
     expect(result.success).toBe(true);
     expect(console.log).toHaveBeenCalledWith(
-      "JVM settings already up to date, no changes needed",
+      "JVM settings already up to date, no changes needed"
     );
   });
 
@@ -63,7 +63,7 @@ describe("initJvmOptions", () => {
       expect.arrayContaining([
         `-javaagent:${"${workspaceFolder}"}/javaagent-libs/${LATEST_MOCKITO_JAR}`,
         "-Xshare:off",
-      ]),
+      ])
     );
   });
 
@@ -88,7 +88,7 @@ describe("initJvmOptions", () => {
       expect.arrayContaining([
         `-javaagent:${"${workspaceFolder}"}/javaagent-libs/${LATEST_MOCKITO_JAR}`,
         "-Xshare:off",
-      ]),
+      ])
     );
   });
 });

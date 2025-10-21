@@ -1,6 +1,6 @@
 import { getMavenCommand } from "./runMavenWrapper.js";
 import { describe, expect, afterEach, it, vi } from "vitest";
-import os from "os";
+import os from "node:os";
 
 describe("getMavenCommand", () => {
   afterEach(() => {
