@@ -14,7 +14,7 @@
     "copy-mockito-agent-gradle": "./src/copyMockitoAgentGradle.js"
   },
   "dependencies": {
-    "comment-json": "^4.5.0"
+    "comment-json": "^4.5.1"
   },
   "devDependencies": {
     "mock-fs": "^5.5.0",
