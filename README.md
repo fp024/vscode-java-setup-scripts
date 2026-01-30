@@ -16,7 +16,7 @@ VSCode Java 프로젝트의 개발 환경 세팅을 자동화하는 CLI 스크�
 pnpm add -D github:fp024/vscode-java-setup-scripts#RELEASE_VERSION
 ```
 
-> 최신 릴리즈는 [GitHub Releases](https://github.com/fp024/vscode-java-setup-scripts/releases)에서 확인하세요.
+> 최신 릴리즈는 [GitHub Tags](https://github.com/fp024/vscode-java-setup-scripts/tags)에서 확인하세요.
 
 ---
 
