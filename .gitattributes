@@ -1,0 +1,3 @@
+package.json             text eol=lf
+pnpm-lock.yml            text eol=lf
+pnpm-workspace.yaml      text eol=lf
