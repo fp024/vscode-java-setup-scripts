@@ -2,7 +2,8 @@ import fs from "node:fs/promises";
 import mock from "mock-fs";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { SETTINGS, addOption } from "./addMissingSerialVersionWarningOption.js";
+import { SETTINGS } from "./addMissingSerialVersionWarningOption.js";
+import { addOption } from "./util/addJDTOption.js";
 
 describe("addOption", () => {
   const settingsDir = SETTINGS.DIR;
@@ -21,7 +22,7 @@ describe("addOption", () => {
   });
 
   it("1. .settings 디렉토리와 prefs 파일이 생성되고 옵션이 추가된다", async () => {
-    await addOption();
+    await addOption(SETTINGS);
     const content = await fs.readFile(prefsPath, "utf8");
     expect(content).toBe(optionLine);
     expect(console.log).toHaveBeenCalledWith(
@@ -35,7 +36,7 @@ describe("addOption", () => {
         [prefsFile]: optionLine,
       },
     });
-    await addOption();
+    await addOption(SETTINGS);
     expect(console.log).toHaveBeenCalledWith(
       `The ${SETTINGS.OPTION.DISPLAY_NAME}=${SETTINGS.OPTION.VALUE} option already exists for VSCode Java environment.`,
     );
@@ -48,7 +49,7 @@ describe("addOption", () => {
         [prefsFile]: oldContent,
       },
     });
-    await addOption();
+    await addOption(SETTINGS);
     const content = await fs.readFile(prefsPath, "utf8");
     expect(content).toBe(oldContent + optionLine);
     expect(console.log).toHaveBeenCalledWith(
@@ -66,7 +67,7 @@ describe("addOption", () => {
       },
     });
 
-    await addOption();
+    await addOption(SETTINGS);
 
     const content = await fs.readFile(prefsPath, "utf8");
     expect(content).toBe("some.other.option=value\n" + optionLine);
@@ -86,7 +87,7 @@ describe("addOption", () => {
       },
     });
 
-    await addOption();
+    await addOption(SETTINGS);
 
     const content = await fs.readFile(prefsPath, "utf8");
     expect(content).toBe(oldContent);
