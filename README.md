@@ -25,12 +25,18 @@ pnpm add -D github:fp024/vscode-java-setup-scripts#RELEASE_VERSION
 ```json
 "scripts": {
   "add-javac-parameters-option": "add-javac-parameters-option",
+  "add-missing-serial-version-warning-option": "add-missing-serial-version-warning-option",
   "copy-mockito-jar": "run-gradle-wrapper copyMockitoJar",
+  "copy-mockito-jar-maven": "run-maven-wrapper clean:clean@clean-javaagent-libs dependency:copy@copy-mockito-agent",
   "copy-mockito-agent-gradle": "copy-mockito-agent-gradle",
   "init-test-jvm-options": "init-test-jvm-options",
   "init-project": "pnpm run add-javac-parameters-option && pnpm run copy-mockito-agent-gradle && pnpm run copy-mockito-jar && pnpm run init-test-jvm-options"
 }
 ```
+
+💡 **copy-mockito-jar-maven**, **copy-mockito-agent-gradle**는 처리를 위한 Goal이나 Task가 pom.xml이나 build.gradle에 미리 설정되어있어야합니다. 하단의 추가 자료를 참조해보세요.
+
+
 
 ---
 
@@ -47,14 +53,26 @@ pnpm run init-project
 - **addJavacParametersOption.js**  
   `.settings/org.eclipse.jdt.core.prefs`에 `-parameters` 옵션을 추가합니다.
 
+- **addMissingSerialVersionWarningOption**
+  
+  `.settings/org.eclipse.jdt.core.prefs`에 `missingSerialVersion=warning` 옵션을 추가합니다.
+  
+  이 옵션이 설정되지 않으면 vscode-java에서 SerialVersionUID를 생성하는 팝업 메뉴를 사용할 수 없습니다.
+  
 - **copyMockitoAgentGradle.js**  
   `java21-mockito-agent.gradle` 파일을 프로젝트의 `gradle/` 디렉터리로 복사합니다.
 
 - **runGradleWrapper.js**  
-  Gradle Wrapper를 통해 `copyMockitoJar` 등 커맨드를 실행합니다.
+  **Gradle Wrapper**를 통해 `copyMockitoJar` 등의 커맨드를 실행합니다.
 
+- **runMavenWrapper**
+  
+  **Maven Warpper**를 통해  `copyMockitoJar` 등의 커맨드를 실행합니다.
+  
 - **initTestJvmOptions.js**  
   `.vscode/settings.json`의 `java.test.config.vmArgs`에 Mockito JavaAgent, `-Xshare:off` 옵션을 자동으로 추가합니다.
+  
+  
 
 
 ## 요구사항
