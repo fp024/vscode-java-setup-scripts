@@ -1,6 +1,16 @@
 import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+/**
+ * @typedef {object} JDTOptionSettings
+ * @property {string} DIR
+ * @property {string} FILE
+ * @property {object} OPTION
+ * @property {string} OPTION.KEY
+ * @property {string} OPTION.DISPLAY_NAME
+ * @property {string} OPTION.VALUE
+ */
+
 async function ensureDirectory(dir) {
   try {
     await access(dir);
@@ -9,6 +19,9 @@ async function ensureDirectory(dir) {
   }
 }
 
+/**
+ * @param {JDTOptionSettings} SETTINGS
+ */
 async function addOption(SETTINGS) {
   const settingsDir = path.join(process.cwd(), SETTINGS.DIR);
   const prefsFilePath = path.join(settingsDir, SETTINGS.FILE);

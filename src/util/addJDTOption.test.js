@@ -2,10 +2,19 @@ import fs from "node:fs/promises";
 import mock from "mock-fs";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { SETTINGS } from "./addJavacParametersOption.js";
-import { addOption } from "./util/addJDTOption.js";
+import { SETTINGS as JAVAC_PARAMETERS_SETTINGS } from "../addJavacParametersOption.js";
+import { SETTINGS as MISSING_SERIAL_VERSION_SETTINGS } from "../addMissingSerialVersionWarningOption.js";
+import { addOption } from "./addJDTOption.js";
 
-describe("addOption", () => {
+/**
+ * @type {[string, import("./addJDTOption.js").JDTOptionSettings][]}
+ */
+const TEST_CASES = [
+  ["JDT methodParameters", JAVAC_PARAMETERS_SETTINGS],
+  ["JDT missingSerialVersion", MISSING_SERIAL_VERSION_SETTINGS],
+];
+
+describe.each(TEST_CASES)("addOption - %s", (_name, SETTINGS) => {
   const settingsDir = SETTINGS.DIR;
   const prefsFile = SETTINGS.FILE;
   const prefsPath = path.join(settingsDir, prefsFile);
@@ -16,6 +25,7 @@ describe("addOption", () => {
     vi.spyOn(console, "log").mockImplementation(() => {});
     vi.spyOn(console, "warn").mockImplementation(() => {});
   });
+
   afterEach(() => {
     mock.restore();
     vi.restoreAllMocks();
@@ -23,6 +33,7 @@ describe("addOption", () => {
 
   it("1. .settings 디렉토리와 prefs 파일이 생성되고 옵션이 추가된다", async () => {
     await addOption(SETTINGS);
+
     const content = await fs.readFile(prefsPath, "utf8");
     expect(content).toBe(optionLine);
     expect(console.log).toHaveBeenCalledWith(
@@ -36,7 +47,9 @@ describe("addOption", () => {
         [prefsFile]: optionLine,
       },
     });
+
     await addOption(SETTINGS);
+
     expect(console.log).toHaveBeenCalledWith(
       `The ${SETTINGS.OPTION.DISPLAY_NAME}=${SETTINGS.OPTION.VALUE} option already exists for VSCode Java environment.`,
     );
@@ -49,7 +62,9 @@ describe("addOption", () => {
         [prefsFile]: oldContent,
       },
     });
+
     await addOption(SETTINGS);
+
     const content = await fs.readFile(prefsPath, "utf8");
     expect(content).toBe(oldContent + optionLine);
     expect(console.log).toHaveBeenCalledWith(
@@ -57,10 +72,9 @@ describe("addOption", () => {
     );
   });
 
-  it(`4. 옵션 키가 이미 있지만 값이 다르면 ${SETTINGS.OPTION.VALUE}로 수정된다`, async () => {
+  it(`4. 옵션 키가 이미 있지만 값이 다르면 설정 값으로 수정된다`, async () => {
     const oldContent =
-      "some.other.option=value\n" + //
-      `${SETTINGS.OPTION.KEY}=none\n`;
+      "some.other.option=value\n" + `${SETTINGS.OPTION.KEY}=none\n`;
     mock({
       [settingsDir]: {
         [prefsFile]: oldContent,

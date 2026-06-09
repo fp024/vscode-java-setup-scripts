@@ -1,6 +1,7 @@
 import { isDirectRun } from "./util/isDirectRun.js";
 import { addOption } from "./util/addJDTOption.js";
 
+/** @type {import("./util/addJDTOption.js").JDTOptionSettings} */
 export const SETTINGS = {
   DIR: ".settings",
   FILE: "org.eclipse.jdt.core.prefs",
