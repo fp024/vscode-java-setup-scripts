@@ -28,14 +28,18 @@ async function addCompilerOption() {
 
   try {
     const fileContent = await readFile(prefsFilePath, "utf8");
+
     if (fileContent.includes(prefsContent.trim())) {
       console.log(
-        "The -parameters compiler option already exists for VSCode Java environment."
+        "The -parameters compiler option already exists for VSCode Java environment.",
       );
     } else {
-      await writeFile(prefsFilePath, fileContent + prefsContent);
+      const contentToWrite = fileContent.endsWith("\n")
+        ? fileContent + prefsContent
+        : `${fileContent}\n${prefsContent}`;
+      await writeFile(prefsFilePath, contentToWrite);
       console.log(
-        "The -parameters compiler option has been added for VSCode Java environment."
+        "The -parameters compiler option has been added for VSCode Java environment.",
       );
     }
   } catch {

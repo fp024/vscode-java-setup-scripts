@@ -1,0 +1,90 @@
+import { access, mkdir, readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { isDirectRun } from "./util/isDirectRun.js";
+
+const SETTINGS = {
+  DIR: ".settings",
+  FILE: "org.eclipse.jdt.core.prefs",
+  OPTION: {
+    KEY: "org.eclipse.jdt.core.compiler.problem.missingSerialVersion",
+    VALUE: "warning",
+  },
+};
+
+async function ensureDirectory(dir) {
+  try {
+    await access(dir);
+  } catch {
+    await mkdir(dir, { recursive: true });
+  }
+}
+
+async function addOption() {
+  const settingsDir = path.join(process.cwd(), SETTINGS.DIR);
+  const prefsFilePath = path.join(settingsDir, SETTINGS.FILE);
+  const optionLine = `${SETTINGS.OPTION.KEY}=${SETTINGS.OPTION.VALUE}`;
+  const prefsContent = `${optionLine}\n`;
+
+  await ensureDirectory(settingsDir);
+
+  try {
+    const fileContent = await readFile(prefsFilePath, "utf8");
+    const lines = fileContent.split(/\r?\n/);
+    const optionIndexes = lines
+      .map((rawLine, index) => ({
+        index,
+        line: rawLine.trim(),
+      }))
+      .filter(({ line }) => line.startsWith(`${SETTINGS.OPTION.KEY}=`))
+      .map(({ index }) => index);
+
+    if (optionIndexes.length > 1) {
+      console.warn(
+        "Multiple JDT missingSerialVersion options were found. No changes were made.",
+      );
+      return;
+    }
+
+    if (optionIndexes.length === 1) {
+      const optionIndex = optionIndexes[0];
+
+      if (lines[optionIndex].trim() === optionLine) {
+        console.log(
+          "The JDT missingSerialVersion=warning option already exists for VSCode Java environment.",
+        );
+      } else {
+        lines[optionIndex] = optionLine;
+        await writeFile(prefsFilePath, lines.join("\n"));
+        console.log(
+          "The JDT missingSerialVersion option has been updated to warning for VSCode Java environment.",
+        );
+      }
+    } else {
+      const contentToWrite = fileContent.endsWith("\n")
+        ? fileContent + prefsContent
+        : `${fileContent}\n${prefsContent}`;
+
+      await writeFile(prefsFilePath, contentToWrite);
+      console.log(
+        "The JDT missingSerialVersion=warning option has been added for VSCode Java environment.",
+      );
+    }
+  } catch {
+    // 파일이 없는 경우 새로 생성
+    await writeFile(prefsFilePath, prefsContent);
+    console.log(
+      "Created new prefs file with JDT missingSerialVersion=warning option.",
+    );
+  }
+}
+
+export { addOption, ensureDirectory };
+
+if (isDirectRun(import.meta.url)) {
+  try {
+    await addOption();
+  } catch (error) {
+    console.error("Error:", error.message);
+    process.exit(1);
+  }
+}
