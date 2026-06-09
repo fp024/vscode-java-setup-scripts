@@ -2,14 +2,13 @@ import fs from "node:fs/promises";
 import mock from "mock-fs";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { addOption } from "./addMissingSerialVersionWarningOption.js";
+import { SETTINGS, addOption } from "./addMissingSerialVersionWarningOption.js";
 
 describe("addOption", () => {
-  const settingsDir = ".settings";
-  const prefsFile = "org.eclipse.jdt.core.prefs";
+  const settingsDir = SETTINGS.DIR;
+  const prefsFile = SETTINGS.FILE;
   const prefsPath = path.join(settingsDir, prefsFile);
-  const optionLine =
-    "org.eclipse.jdt.core.compiler.problem.missingSerialVersion=warning\n";
+  const optionLine = `${SETTINGS.OPTION.KEY}=${SETTINGS.OPTION.VALUE}\n`;
 
   beforeEach(() => {
     mock({});
@@ -26,7 +25,7 @@ describe("addOption", () => {
     const content = await fs.readFile(prefsPath, "utf8");
     expect(content).toBe(optionLine);
     expect(console.log).toHaveBeenCalledWith(
-      "Created new prefs file with JDT missingSerialVersion=warning option.",
+      `Created new prefs file with ${SETTINGS.OPTION.DISPLAY_NAME}=${SETTINGS.OPTION.VALUE} option.`,
     );
   });
 
@@ -38,7 +37,7 @@ describe("addOption", () => {
     });
     await addOption();
     expect(console.log).toHaveBeenCalledWith(
-      "The JDT missingSerialVersion=warning option already exists for VSCode Java environment.",
+      `The ${SETTINGS.OPTION.DISPLAY_NAME}=${SETTINGS.OPTION.VALUE} option already exists for VSCode Java environment.`,
     );
   });
 
@@ -53,14 +52,14 @@ describe("addOption", () => {
     const content = await fs.readFile(prefsPath, "utf8");
     expect(content).toBe(oldContent + optionLine);
     expect(console.log).toHaveBeenCalledWith(
-      "The JDT missingSerialVersion=warning option has been added for VSCode Java environment.",
+      `The ${SETTINGS.OPTION.DISPLAY_NAME}=${SETTINGS.OPTION.VALUE} option has been added for VSCode Java environment.`,
     );
   });
 
-  it("4. 옵션 키가 이미 있지만 값이 다르면 warning으로 수정된다", async () => {
+  it(`4. 옵션 키가 이미 있지만 값이 다르면 ${SETTINGS.OPTION.VALUE}로 수정된다`, async () => {
     const oldContent =
-      "some.other.option=value\n" +
-      "org.eclipse.jdt.core.compiler.problem.missingSerialVersion=ignore\n";
+      "some.other.option=value\n" + //
+      `${SETTINGS.OPTION.KEY}=none\n`;
     mock({
       [settingsDir]: {
         [prefsFile]: oldContent,
@@ -72,15 +71,15 @@ describe("addOption", () => {
     const content = await fs.readFile(prefsPath, "utf8");
     expect(content).toBe("some.other.option=value\n" + optionLine);
     expect(console.log).toHaveBeenCalledWith(
-      "The JDT missingSerialVersion option has been updated to warning for VSCode Java environment.",
+      `The ${SETTINGS.OPTION.DISPLAY_NAME} option has been updated to ${SETTINGS.OPTION.VALUE} for VSCode Java environment.`,
     );
   });
 
   it("5. 옵션 키가 2개 이상 있으면 경고를 출력하고 파일을 변경하지 않는다", async () => {
     const oldContent =
       "some.other.option=value\n" +
-      "org.eclipse.jdt.core.compiler.problem.missingSerialVersion=ignore\n" +
-      "org.eclipse.jdt.core.compiler.problem.missingSerialVersion=error\n";
+      `${SETTINGS.OPTION.KEY}=none\n` +
+      `${SETTINGS.OPTION.KEY}=none\n`;
     mock({
       [settingsDir]: {
         [prefsFile]: oldContent,
@@ -92,7 +91,7 @@ describe("addOption", () => {
     const content = await fs.readFile(prefsPath, "utf8");
     expect(content).toBe(oldContent);
     expect(console.warn).toHaveBeenCalledWith(
-      "Multiple JDT missingSerialVersion options were found. No changes were made.",
+      `Multiple ${SETTINGS.OPTION.DISPLAY_NAME} options were found. No changes were made.`,
     );
   });
 });

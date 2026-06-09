@@ -2,11 +2,12 @@ import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { isDirectRun } from "./util/isDirectRun.js";
 
-const SETTINGS = {
+export const SETTINGS = {
   DIR: ".settings",
   FILE: "org.eclipse.jdt.core.prefs",
   OPTION: {
     KEY: "org.eclipse.jdt.core.compiler.problem.missingSerialVersion",
+    DISPLAY_NAME: "JDT missingSerialVersion",
     VALUE: "warning",
   },
 };
@@ -40,7 +41,7 @@ async function addOption() {
 
     if (optionIndexes.length > 1) {
       console.warn(
-        "Multiple JDT missingSerialVersion options were found. No changes were made.",
+        `Multiple ${SETTINGS.OPTION.DISPLAY_NAME} options were found. No changes were made.`,
       );
       return;
     }
@@ -50,13 +51,13 @@ async function addOption() {
 
       if (lines[optionIndex].trim() === optionLine) {
         console.log(
-          "The JDT missingSerialVersion=warning option already exists for VSCode Java environment.",
+          `The ${SETTINGS.OPTION.DISPLAY_NAME}=${SETTINGS.OPTION.VALUE} option already exists for VSCode Java environment.`,
         );
       } else {
         lines[optionIndex] = optionLine;
         await writeFile(prefsFilePath, lines.join("\n"));
         console.log(
-          "The JDT missingSerialVersion option has been updated to warning for VSCode Java environment.",
+          `The ${SETTINGS.OPTION.DISPLAY_NAME} option has been updated to ${SETTINGS.OPTION.VALUE} for VSCode Java environment.`,
         );
       }
     } else {
@@ -66,14 +67,14 @@ async function addOption() {
 
       await writeFile(prefsFilePath, contentToWrite);
       console.log(
-        "The JDT missingSerialVersion=warning option has been added for VSCode Java environment.",
+        `The ${SETTINGS.OPTION.DISPLAY_NAME}=${SETTINGS.OPTION.VALUE} option has been added for VSCode Java environment.`,
       );
     }
   } catch {
     // 파일이 없는 경우 새로 생성
     await writeFile(prefsFilePath, prefsContent);
     console.log(
-      "Created new prefs file with JDT missingSerialVersion=warning option.",
+      `Created new prefs file with ${SETTINGS.OPTION.DISPLAY_NAME}=${SETTINGS.OPTION.VALUE} option.`,
     );
   }
 }
