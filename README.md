@@ -67,7 +67,7 @@ pnpm run init-project
 
 - **runMavenWrapper**
   
-  **Maven Warpper**를 통해  `copyMockitoJar` 등의 커맨드를 실행합니다.
+  **Maven Wrapper**를 통해  `copyMockitoJar` 등의 커맨드를 실행합니다.
   
 - **initTestJvmOptions.js**  
   `.vscode/settings.json`의 `java.test.config.vmArgs`에 Mockito JavaAgent, `-Xshare:off` 옵션을 자동으로 추가합니다.
