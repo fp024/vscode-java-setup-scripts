@@ -1,4 +1,4 @@
-import mock from "mock-fs";
+import { setFiles, vol } from "./test/memoryFs.js";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { initJvmOptions, CONFIG } from "./initTestJvmOptions.js";
@@ -9,19 +9,24 @@ const SETTINGS_KEY = CONFIG.SETTINGS_KEY;
 const LATEST_MOCKITO_JAR = "mockito-core-5.18.0.jar";
 const PREVIOUS_MOCKITO_JAR = "mockito-core-5.17.0.jar";
 
+vi.mock("node:fs/promises", async () => {
+  const { fs } = await import("./test/memoryFs.js");
+  return { default: fs.promises, ...fs.promises };
+});
+
 describe("initJvmOptions", () => {
   beforeEach(() => {
-    mock({});
+    setFiles({});
     vi.spyOn(console, "log").mockImplementation(() => {});
     vi.spyOn(console, "error").mockImplementation(() => {});
   });
   afterEach(() => {
-    mock.restore();
+    vol.reset();
     vi.restoreAllMocks();
   });
 
   it("Mockito JAR이 없으면 에러를 반환한다", async () => {
-    mock({
+    setFiles({
       [JAVAAGENT_DIR]: {},
       ".vscode": { "settings.json": "{}" },
     });
@@ -39,19 +44,19 @@ describe("initJvmOptions", () => {
         ],
       },
     };
-    mock({
+    setFiles({
       [JAVAAGENT_DIR]: { [LATEST_MOCKITO_JAR]: "fake jar" },
       ".vscode": { "settings.json": JSON.stringify(settings) },
     });
     const result = await initJvmOptions();
     expect(result.success).toBe(true);
     expect(console.log).toHaveBeenCalledWith(
-      "JVM settings already up to date, no changes needed"
+      "JVM settings already up to date, no changes needed",
     );
   });
 
   it("VSCode 설정파일에 설정이 없으면 제대로 추가된다", async () => {
-    mock({
+    setFiles({
       [JAVAAGENT_DIR]: { [LATEST_MOCKITO_JAR]: "fake jar" },
       ".vscode": { "settings.json": "{}" },
     });
@@ -63,7 +68,7 @@ describe("initJvmOptions", () => {
       expect.arrayContaining([
         `-javaagent:${"${workspaceFolder}"}/javaagent-libs/${LATEST_MOCKITO_JAR}`,
         "-Xshare:off",
-      ])
+      ]),
     );
   });
 
@@ -76,7 +81,7 @@ describe("initJvmOptions", () => {
         ],
       },
     };
-    mock({
+    setFiles({
       [JAVAAGENT_DIR]: { [LATEST_MOCKITO_JAR]: "fake jar's contents" },
       ".vscode": { "settings.json": JSON.stringify(settings) },
     });
@@ -88,7 +93,7 @@ describe("initJvmOptions", () => {
       expect.arrayContaining([
         `-javaagent:${"${workspaceFolder}"}/javaagent-libs/${LATEST_MOCKITO_JAR}`,
         "-Xshare:off",
-      ])
+      ]),
     );
   });
 });

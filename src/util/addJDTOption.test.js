@@ -1,5 +1,5 @@
 import fs from "node:fs/promises";
-import mock from "mock-fs";
+import { setFiles, vol } from "../test/memoryFs.js";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SETTINGS as JAVAC_PARAMETERS_SETTINGS } from "../addJavacParametersOption.js";
@@ -14,6 +14,11 @@ const TEST_CASES = [
   ["JDT missingSerialVersion", MISSING_SERIAL_VERSION_SETTINGS],
 ];
 
+vi.mock("node:fs/promises", async () => {
+  const { fs } = await import("../test/memoryFs.js");
+  return { default: fs.promises, ...fs.promises };
+});
+
 describe.each(TEST_CASES)("addOption - %s", (_name, SETTINGS) => {
   const settingsDir = SETTINGS.DIR;
   const prefsFile = SETTINGS.FILE;
@@ -21,13 +26,13 @@ describe.each(TEST_CASES)("addOption - %s", (_name, SETTINGS) => {
   const optionLine = `${SETTINGS.OPTION.KEY}=${SETTINGS.OPTION.VALUE}\n`;
 
   beforeEach(() => {
-    mock({});
+    setFiles({});
     vi.spyOn(console, "log").mockImplementation(() => {});
     vi.spyOn(console, "warn").mockImplementation(() => {});
   });
 
   afterEach(() => {
-    mock.restore();
+    vol.reset();
     vi.restoreAllMocks();
   });
 
@@ -42,7 +47,7 @@ describe.each(TEST_CASES)("addOption - %s", (_name, SETTINGS) => {
   });
 
   it("2. 이미 옵션이 존재할 때 메시지가 올바르게 출력된다", async () => {
-    mock({
+    setFiles({
       [settingsDir]: {
         [prefsFile]: optionLine,
       },
@@ -57,7 +62,7 @@ describe.each(TEST_CASES)("addOption - %s", (_name, SETTINGS) => {
 
   it("3. 옵션이 없을 때 기존 내용 뒤에 옵션이 추가된다", async () => {
     const oldContent = "some.other.option=value\n";
-    mock({
+    setFiles({
       [settingsDir]: {
         [prefsFile]: oldContent,
       },
@@ -75,7 +80,7 @@ describe.each(TEST_CASES)("addOption - %s", (_name, SETTINGS) => {
   it(`4. 옵션 키가 이미 있지만 값이 다르면 설정 값으로 수정된다`, async () => {
     const oldContent =
       "some.other.option=value\n" + `${SETTINGS.OPTION.KEY}=none\n`;
-    mock({
+    setFiles({
       [settingsDir]: {
         [prefsFile]: oldContent,
       },
@@ -95,7 +100,7 @@ describe.each(TEST_CASES)("addOption - %s", (_name, SETTINGS) => {
       "some.other.option=value\n" +
       `${SETTINGS.OPTION.KEY}=none\n` +
       `${SETTINGS.OPTION.KEY}=none\n`;
-    mock({
+    setFiles({
       [settingsDir]: {
         [prefsFile]: oldContent,
       },

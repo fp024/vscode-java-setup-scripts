@@ -18,10 +18,10 @@
     "comment-json": "^5.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.20.1",
-    "mock-fs": "^5.5.0",
-    "prettier": "^3.9.6",
-    "vitest": "^4.1.11"
+    "@types/node": "^22.20.5",
+    "memfs": "^4.80.0",
+    "prettier": "^3.9.9",
+    "vitest": "^5.0.3"
   },
   "scripts": {
     "test": "vitest run",
@@ -29,5 +29,5 @@
     "add-missing-serial-version-warning-option": "node src/addMissingSerialVersionWarningOption.js",
     "copy-mockito-agent-gradle": "node src/copyMockitoAgentGradle.js"
   },
-  "packageManager": "pnpm@11.24.0+sha512.bd27e345e976dcb0be0b7a1228217b049a817e21b1f355c90dbe7dc46671895a8bc1e6d06c24554505ea93ea0b45f489a27ec1bfbc8de6a9659fca0f16fa0000"
+  "packageManager": "pnpm@12.10.1+sha512.ba40a37eb1a370d60fea8c4cf1d364c13bcccef518e98ad2bcee954f539d38da37458e58261a3fa55e06523450ea0ffff9f497b135be41f2c15c1642bacace6c"
 }

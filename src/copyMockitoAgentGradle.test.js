@@ -1,8 +1,13 @@
 import { access, readFile, stat } from "node:fs/promises";
-import mock from "mock-fs";
+import { setFiles, vol } from "./test/memoryFs.js";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { copyMockitoAgentGradle } from "./copyMockitoAgentGradle.js";
+
+vi.mock("node:fs/promises", async () => {
+  const { fs } = await import("./test/memoryFs.js");
+  return { default: fs.promises, ...fs.promises };
+});
 
 describe("copyMockitoAgentGradle", () => {
   const mockGradleContent = `[Mockito Agent 설정 파일 내용...]`;
@@ -13,12 +18,12 @@ describe("copyMockitoAgentGradle", () => {
   });
 
   afterEach(() => {
-    mock.restore();
+    vol.reset();
     vi.restoreAllMocks();
   });
 
   test("should copy java21-mockito-agent.gradle to gradle directory", async () => {
-    mock({
+    setFiles({
       [path.resolve("src/gradle/java21-mockito-agent.gradle")]:
         mockGradleContent,
     });
@@ -35,7 +40,7 @@ describe("copyMockitoAgentGradle", () => {
 
     // 파일 크기가 일치하는지 확인
     const sourceStats = await stat(
-      path.resolve("src/gradle/java21-mockito-agent.gradle")
+      path.resolve("src/gradle/java21-mockito-agent.gradle"),
     );
     const targetStats = await stat(targetFile);
     // 💡 stats에서 반환하는 값은 바이트 사이즈이다.
@@ -44,7 +49,7 @@ describe("copyMockitoAgentGradle", () => {
   });
 
   test("should create gradle directory if it does not exist", async () => {
-    mock({
+    setFiles({
       [path.resolve("src/gradle/java21-mockito-agent.gradle")]:
         mockGradleContent,
     });
@@ -65,7 +70,7 @@ describe("copyMockitoAgentGradle", () => {
     const targetFile = path.join(gradleDir, "java21-mockito-agent.gradle");
 
     // 기존 파일이 있는 상태로 mock 설정
-    mock({
+    setFiles({
       [path.resolve("src/gradle/java21-mockito-agent.gradle")]:
         mockGradleContent,
       [gradleDir]: {
